@@ -15,6 +15,13 @@ class Cell(object):
         self.f = 0
         self.h = 0
 
+
+    def __repr__(self):
+        return self.x, self.y
+
+    def __lt__(self, other):
+        return self.f < other.f
+
 # # is wall
 # A is start
 # B is goal
@@ -103,27 +110,26 @@ class AStar(object):
         walls = self.getWalls(matrix)
         start, end = self.getAB(matrix)
 
+        # Set the values for the size of the grid
         self.gridHeight = len(matrix)
         self.gridWidth = len(matrix[0])
-
 
         # Let's make some cells
         for x in range(self.gridWidth):
             for y in range(self.gridHeight):
+                # If location is a wall, we cannot go there.
                 reachable = False if (x, y) in walls else True
                 self.cells.append(Cell(x, y, reachable))
-        print start
-        print end
         self.start = self.getCell(start[0], start[1])
         self.end = self.getCell(end[0], end[1])
 
     def displayPath(self):
         cell = self.end
-        print self.end.x, self.end.y
+        print (self.end.x, self.end.y)
         while cell.parent is not self.start:
             cell = cell.parent
-            print 'path: cell: %d,%d' % (cell.x, cell.y)
-        print self.start.x, self.start.y
+            print( 'path: cell: %d,%d' % (cell.x, cell.y))
+        print(self.start.x, self.start.y)
 
 
     def solve(self):
