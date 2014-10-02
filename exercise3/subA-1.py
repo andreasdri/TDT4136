@@ -1,6 +1,7 @@
 # Subtask A-1
 # Solving with A*
 __author__ = 'Stein-Otto Svorstol'
+__coAuthor__ = 'Andreas Drivenes'
 
 import heapq
 
@@ -9,6 +10,10 @@ class Cell(object):
         self.x = x
         self.y = y
         self.reachable = reachable
+        self.parent = None
+        self.g = 0
+        self.f = 0
+        self.h = 0
 
 # # is wall
 # A is start
@@ -22,9 +27,9 @@ class AStar(object):
         heapq.heapify(self.opened)
         self.closed = set()
         self.cells = []
-        self.grid_height = 0 # Set in init_grid
-        self.grid_width = 0
-        self.init_grid()
+        self.gridHeight = 0 # Set in initGrid
+        self.gridWidth = 0
+        self.initGrid()
 
     def readFile(self, filename):
         #Goes over file and creates a matrix of it
@@ -59,26 +64,93 @@ class AStar(object):
                     walls.append((x, y))
         return walls
 
-    def init_grid(self):
+    def getHeuristic(self, cell):
+        #Calculate the Manhattan Distance between a cell and the goal cell
+        #This will serve as our heuristic for the A* Algorithm
+        return (abs(cell.x - self.end.x) + abs(cell.y - self.end.y))
+
+    def getCell(self, x, y):
+        return self.cells[x * self.gridHeight + y]
+
+    def updateCell(self, neighbor, cell):
+        #The cost to get to this cell
+        neighbor.g = cell.g + 1
+        #The heuristic
+        neighbor.h = self.getHeuristic(neighbor)
+        neighbor.parent = cell
+        neighbor.f = neighbor.g + neighbor.h
+
+    def getNeighbors(self, cell):
+        neighbors = []
+        #Go right
+        if(cell.x < self.gridWidth - 1):
+            neighbors.append(self.getCell(cell.x + 1, cell.y))
+        #Go left
+        if(cell.y > 0):
+            neighbors.append(self.getCell(cell.x, cell.y - 1))
+        #Go up
+        if(cell.x > 0):
+            neighbors.append(self.getCell(cell.x - 1, cell.y))
+        #Go down
+        if(cell.y < self.gridHeight - 1):
+            neighbors.append(self.getCell(cell.x, cell.y + 1))
+        return neighbors
+
+
+    def initGrid(self):
         # First get our coordinates:
         matrix = self.readFile('boards/board-1-1.txt') # Need method for giving coordinates of walls
         walls = self.getWalls(matrix)
         start, end = self.getAB(matrix)
 
-        self.grid_height = len(matrix)
-        self.grid_width = len(matrix[0])
+        self.gridHeight = len(matrix)
+        self.gridWidth = len(matrix[0])
 
 
         # Let's make some cells
-        for x in range(self.grid_width):
-            for y in range(self.grid_height):
-                reachable = True if (x, y) in walls else False
+        for x in range(self.gridWidth):
+            for y in range(self.gridHeight):
+                reachable = False if (x, y) in walls else True
                 self.cells.append(Cell(x, y, reachable))
-        self.start = start # These needs to be made into cells.
-        self.end = end
+        print start
+        print end
+        self.start = self.getCell(start[0], start[1])
+        self.end = self.getCell(end[0], end[1])
+
+    def displayPath(self):
+        cell = self.end
+        print self.end.x, self.end.y
+        while cell.parent is not self.start:
+            cell = cell.parent
+            print 'path: cell: %d,%d' % (cell.x, cell.y)
+        print self.start.x, self.start.y
+
+
+    def solve(self):
+        heapq.heappush(self.opened, (self.start.f, self.start))
+        while len(self.opened):
+            f, cell = heapq.heappop(self.opened)
+            self.closed.add(cell)
+
+            if cell is self.end:
+                return self.displayPath()
+
+            for neighbor in self.getNeighbors(cell):
+                        
+                if neighbor.reachable and neighbor not in self.closed:
+                    if (neighbor.f, neighbor) in self.opened:
+                        if neighbor.g > cell.g + 1:
+                            self.updateCell(neighbor, cell)
+                    else:
+                        self.updateCell(neighbor, cell)
+                        heapq.heappush(self.opened, (neighbor.f, neighbor))
+
+
 
     def printEverything(self): # test
         print(self.cells)
 
 
-thing = AStar().printEverything() # test
+thing = AStar().solve() # test
+
+
