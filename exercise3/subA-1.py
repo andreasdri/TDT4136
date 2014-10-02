@@ -29,6 +29,7 @@ class AStar(object):
         self.cells = []
         self.gridHeight = 0 # Set in initGrid
         self.gridWidth = 0
+        self.matrix = []
         self.initGrid()
 
     def readFile(self, filename):
@@ -99,12 +100,12 @@ class AStar(object):
 
     def initGrid(self):
         # First get our coordinates:
-        matrix = self.readFile('boards/board-1-1.txt') # Need method for giving coordinates of walls
-        walls = self.getWalls(matrix)
-        start, end = self.getAB(matrix)
+        self.matrix = self.readFile('boards/board-1-1.txt') # Need method for giving coordinates of walls
+        walls = self.getWalls(self.matrix)
+        start, end = self.getAB(self.matrix)
 
-        self.gridHeight = len(matrix)
-        self.gridWidth = len(matrix[0])
+        self.gridHeight = len(self.matrix)
+        self.gridWidth = len(self.matrix[0])
 
 
         # Let's make some cells
@@ -119,12 +120,17 @@ class AStar(object):
 
     def displayPath(self):
         cell = self.end
-        print self.end.x, self.end.y
         while cell.parent is not self.start:
             cell = cell.parent
-            print 'path: cell: %d,%d' % (cell.x, cell.y)
-        print self.start.x, self.start.y
+            self.matrix[cell.y][cell.x] = 'o'
 
+        board = ''
+        for y in range(0, len(self.matrix)):
+            row = ''
+            for x in range(0, len(self.matrix[y])):
+                row += self.matrix[y][x]
+            board += row + '\n'
+        print board
 
     def solve(self):
         heapq.heappush(self.opened, (self.start.f, self.start))
