@@ -1,14 +1,14 @@
-# Subtask A-1
+# Subtask A-2
 # Solving with A*
 __authors__ = 'Stein-Otto Svorstol and Andreas Drivenes'
 
 import heapq
 
 class Cell(object):
-    def __init__(self, x, y, reachable):
+    def __init__(self, x, y, cost):
         self.x = x
         self.y = y
-        self.reachable = reachable
+        self.cost = cost
         self.parent = None
         self.g = 0
         self.f = 0
@@ -71,6 +71,20 @@ class AStar(object):
                     walls.append((x, y))
         return walls
 
+    def getCellCost(self, x, y):
+        c = self.matrix[y][x]
+        if(c == 'w'):
+            return 100
+        elif(c == 'm'):
+            return 50
+        elif(c == 'f'):
+            return 10
+        elif(c == 'g'):
+            return 5
+        else:
+         return 1
+
+
     def getHeuristic(self, cell):
         #Calculate the Manhattan Distance between a cell and the goal cell
         #This will serve as our heuristic for the A* Algorithm
@@ -81,7 +95,7 @@ class AStar(object):
 
     def updateCell(self, neighbor, cell):
         #The cost to get to this cell
-        neighbor.g = cell.g + 1
+        neighbor.g = cell.g + cell.cost
         #The heuristic
         neighbor.h = self.getHeuristic(neighbor)
         neighbor.parent = cell
@@ -106,7 +120,7 @@ class AStar(object):
 
     def initGrid(self):
         # First get our coordinates:
-        self.matrix = self.readFile('boards/board-1-1.txt') # Need method for giving coordinates of walls
+        self.matrix = self.readFile('boards/board-2-4.txt') # Need method for giving coordinates of walls
         walls = self.getWalls(self.matrix)
         start, end = self.getAB(self.matrix)
 
@@ -117,9 +131,7 @@ class AStar(object):
         # Let's make some cells
         for x in range(self.gridWidth):
             for y in range(self.gridHeight):
-                # If location is a wall, we cannot go there.
-                reachable = False if (x, y) in walls else True
-                self.cells.append(Cell(x, y, reachable))
+                self.cells.append(Cell(x, y, self.getCellCost(x, y)))
         self.start = self.getCell(start[0], start[1])
         self.end = self.getCell(end[0], end[1])
 
@@ -150,9 +162,9 @@ class AStar(object):
 
             for neighbor in self.getNeighbors(cell):
                         
-                if neighbor.reachable and neighbor not in self.closed:
+                if neighbor not in self.closed:
                     if (neighbor.f, neighbor) in self.opened:
-                        if neighbor.g > cell.g + 1:
+                        if neighbor.g > cell.g + neighbor.cost:
                             self.updateCell(neighbor, cell)
                     else:
                         self.updateCell(neighbor, cell)
@@ -165,5 +177,4 @@ class AStar(object):
 
 
 thing = AStar().solve() # test
-
 
