@@ -1,15 +1,16 @@
-# Subtask A-1
+# Subtask A-3
 # Solving with A*
 __authors__ = 'Stein-Otto Svorstol and Andreas Drivenes'
 
 import heapq
 
 class Cell(object):
-    def __init__(self, x, y, reachable):
+    def __init__(self, x, y, cost, reachable):
         self.x = x
         self.y = y
-        self.reachable = reachable
+        self.cost = cost
         self.parent = None
+        self.reachable = reachable
         self.g = 0
         self.f = 0
         self.h = 0
@@ -18,6 +19,7 @@ class Cell(object):
     def __repr__(self):
         return self.x, self.y
 
+    #Compare object function for heapq. Sort on f for A Star algorithm
     def __lt__(self, other):
         return self.f < other.f
 
@@ -71,6 +73,21 @@ class AStar(object):
                     walls.append((x, y))
         return walls
 
+    def getCellCost(self, x, y):
+        c = self.matrix[y][x]
+        #Map the cost according to cell type
+        if(c == 'w'):
+            return 100
+        elif(c == 'm'):
+            return 50
+        elif(c == 'f'):
+            return 10
+        elif(c == 'g'):
+            return 5
+        else:
+         return 1
+
+
     def getHeuristic(self, cell):
         #Calculate the Manhattan Distance between a cell and the goal cell
         #This will serve as our heuristic for the A* Algorithm
@@ -81,7 +98,7 @@ class AStar(object):
 
     def updateCell(self, neighbor, cell):
         #The cost to get to this cell
-        neighbor.g = cell.g + 1
+        neighbor.g = cell.g + cell.cost
         #The heuristic
         neighbor.h = self.getHeuristic(neighbor)
         neighbor.parent = cell
@@ -119,20 +136,28 @@ class AStar(object):
             for y in range(self.gridHeight):
                 # If location is a wall, we cannot go there.
                 reachable = False if (x, y) in walls else True
-                self.cells.append(Cell(x, y, reachable))
-        #Our start cell and our goal cell
+                self.cells.append(Cell(x, y, self.getCellCost(x, y), reachable))
         self.start = self.getCell(start[0], start[1])
         self.end = self.getCell(end[0], end[1])
 
     def displayPath(self):
         cell = self.end
 
-        #Display an o if the cell is in the shortest path
+        #Display * for the open nodes
+        for oCell in self.opened:
+            self.matrix[oCell[1].y][oCell[1].x] = '*'
+
+        #Display x for the closed nodes
+        for cCell in self.closed:
+            matrixCell = self.matrix[cCell.y][cCell.x]
+            if matrixCell != 'A' and matrixCell != 'B':
+                self.matrix[cCell.y][cCell.x] = 'x' 
+
+        #Display o for the shortest path to the goal
         while cell.parent is not self.start:
             cell = cell.parent
             self.matrix[cell.y][cell.x] = 'o'
 
-        #Print the board to console
         board = ''
         for y in range(0, len(self.matrix)):
             row = ''
@@ -146,29 +171,28 @@ class AStar(object):
         #This is our implementation of the A Star algorithm
         #Push the start cell to the list of open nodes
         heapq.heappush(self.opened, (self.start.f, self.start))
-
         while len(self.opened):
             f, cell = heapq.heappop(self.opened)
             self.closed.add(cell)
 
             #Return path if the current cell is indeed our goal cell
-            if cell is self.end: 
+            if cell is self.end:
                 return self.displayPath()
+
             #Loop through all the neighbor nodes 
-            for neighbor in self.getNeighbors(cell):
+            for neighbor in self.getNeighbors(cell):      
                 if neighbor.reachable and neighbor not in self.closed:
                     if (neighbor.f, neighbor) in self.opened:
-                        if neighbor.g > cell.g + 1:
+                        if neighbor.g > cell.g + neighbor.cost:
                             self.updateCell(neighbor, cell)
                     else:
                         self.updateCell(neighbor, cell)
                         heapq.heappush(self.opened, (neighbor.f, neighbor))
 
 
-    def printEverything(self): 
+
+    def printEverything(self): # test
         print(self.cells)
 
 
-thing = AStar().solve() 
-
-
+thing = AStar().solve() # test

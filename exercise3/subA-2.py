@@ -62,17 +62,9 @@ class AStar(object):
                     B = (x, y)
         return A, B
 
-    def getWalls(self, matrix):
-        # Goes over a matrix and returns coordinates for the walls as a list
-        walls = []
-        for y in range(0, len(matrix)):
-            for x in range(0, len(matrix[y])):
-                if(matrix[y][x] == '#'):
-                    walls.append((x, y))
-        return walls
-
     def getCellCost(self, x, y):
         c = self.matrix[y][x]
+        #Map the cost according to cell type
         if(c == 'w'):
             return 100
         elif(c == 'm'):
@@ -121,7 +113,6 @@ class AStar(object):
     def initGrid(self):
         # First get our coordinates:
         self.matrix = self.readFile('boards/board-2-4.txt') # Need method for giving coordinates of walls
-        walls = self.getWalls(self.matrix)
         start, end = self.getAB(self.matrix)
 
         # Set the values for the size of the grid
@@ -138,10 +129,12 @@ class AStar(object):
     def displayPath(self):
         cell = self.end
 
+        #Display o for the shortest path to the goal node
         while cell.parent is not self.start:
             cell = cell.parent
             self.matrix[cell.y][cell.x] = 'o'
 
+        #Print the board to console
         board = ''
         for y in range(0, len(self.matrix)):
             row = ''
@@ -152,14 +145,18 @@ class AStar(object):
 
 
     def solve(self):
+        #This is our implementation of the A Star algorithm
+        #Push the start cell to the list of open nodes
         heapq.heappush(self.opened, (self.start.f, self.start))
         while len(self.opened):
             f, cell = heapq.heappop(self.opened)
             self.closed.add(cell)
 
+            #Return path if the current cell is indeed our goal cell
             if cell is self.end:
                 return self.displayPath()
 
+            #Loop through all the neighbor nodes 
             for neighbor in self.getNeighbors(cell):
                         
                 if neighbor not in self.closed:
