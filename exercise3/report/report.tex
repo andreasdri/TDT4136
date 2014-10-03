@@ -1,19 +1,68 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{listings, graphicx, float, fixltx2e, enumerate}
 \usepackage[utf8]{inputenc}
-\lstset{language=oz, frame=single, breaklines=true}
+\lstset{frame=single, breaklines=true}
 \DeclareGraphicsExtensions{.png,.jpg}
 \author{Stein-Otto Svorstøl and Andreas Drivenes
-\\3. year MTDT}
+\\3rd year MTDT}
 \title{TDT4136 - Exercise 3}
 \date{Fall 2014}
 \begin{document}
 \maketitle
+We based our A*-implementation on the work done by Luarent Luce, see the bibliography. \cite{a-star-impl}
+The visualization is simply written as text to console, as we did not make visualization a priority.
 
 \section*{Subproblem A-1}
+Here are the results from the four boards:
+\subsection*{Board 1-1}
 \begin{lstlisting}
-# Code
+....................
+........oooooooooo..
+........o######..o..
+........oooA..#..B..
+.........######.....
+....................
+....................
 \end{lstlisting}
+\subsection*{Board 1-2}
+\begin{lstlisting}
+....ooo#............
+...oo#o#............
+..oo#oo#............
+Aoo#.o#....ooooooooB
+....#oo#..oo#.......
+.....#oo#oo#........
+......#ooo#.........
+\end{lstlisting}
+\subsection*{Board 1-3}
+\begin{lstlisting}
+.........oooooo.....
+.........o#...ooo...
+.......##oo#....o...
+......#oA#o#....o...
+......#o#oo#....o...
+......#ooo#.....oo..
+.......###.......ooB
+\end{lstlisting}
+\subsection*{Board 1-4}
+\begin{lstlisting}
+Ao#.......#......#..
+#o#.#####.#.####.#..
+oo#ooooo#.#....#....
+o##o###o######.#####
+oo#oB#oo#....#...#..
+#o####o##.##.#.#.##.
+.oooooo....#...#....
+\end{lstlisting}
+
+
+\begin{thebibliography}{9}
+
+\bibitem{a-star-impl}
+  http://www.laurentluce.com/posts/solving-mazes-using-python-simple-recursivity-and-a-search/
+  \\ Downloaded October 3. 2014
+
+\end{thebibliography}
 
 \section*{Subproblem A-2}
 \subsection*{Board 2-1}
