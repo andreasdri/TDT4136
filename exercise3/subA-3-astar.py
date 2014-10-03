@@ -30,7 +30,7 @@ class Cell(object):
 
 
 class AStar(object):
-    def __init__(self):
+    def __init__(self, newBoardname):
         self.opened = [] # Visited nodes
         heapq.heapify(self.opened)
         self.closed = set()
@@ -38,6 +38,7 @@ class AStar(object):
         self.gridHeight = 0 # Set in initGrid
         self.gridWidth = 0
         self.matrix = []
+        self.boardname = newBoardname
         self.initGrid()
 
     def readFile(self, filename):
@@ -123,7 +124,7 @@ class AStar(object):
 
     def initGrid(self):
         # First get our coordinates:
-        self.matrix = self.readFile('boards/board-1-1.txt')
+        self.matrix = self.readFile(self.boardname)
         walls = self.getWalls(self.matrix)
         start, end = self.getAB(self.matrix)
 
@@ -191,8 +192,12 @@ class AStar(object):
 
 
 
-    def printEverything(self): # test
-        print(self.cells)
+def main():
+    boardRoot = 'boards/board-'
+    boards = ['1-1', '1-2', '1-3', '1-4', '2-1', '2-2', '2-3', '2-4']
+    for board in boards:
+        boardName = boardRoot + board + '.txt'
+        print(boardName)
+        thing = AStar(boardName).solve()
 
-
-thing = AStar().solve() # test
+main()
