@@ -9,8 +9,10 @@
 \date{Fall 2014}
 \begin{document}
 \maketitle
-We based our A*-implementation on the work done by Luarent Luce, see the bibliography. \cite{a-star-impl}
+\paragraph{We based our A*-implementation} on the work done by Luarent Luce, see the bibliography. \cite{a-star-impl}
 The visualization is simply written as text to console, as we did not make visualization a priority.
+
+\paragraph{We've structured our code} so that there's one Python-file for each subtask, except the third one where each implementation has gotten it's own file.
 
 \section*{Subproblem A-1}
 Here are the results from the four boards:
@@ -55,6 +57,115 @@ oo#oB#oo#....#...#..
 .oooooo....#...#....
 \end{lstlisting}
 
+
+\section*{Subproblem A-3}
+\paragraph{We've used the same syntax} as the figures given to us in the problem description, but as we did not prioritize the visualization part of the exercise, we were not able to hand in a layered presentation. This means we cannot show the type of cell.
+
+\subsection*{Board 1-1}
+\subsubsection*{A*}
+\begin{lstlisting}
+........**********..
+.......*oooooooooo*.
+......*xo######*xo*.
+.....*xxoooAxx#xxB..
+......*xx######xx*..
+.......*xxxxxxxx*...
+........********....
+\end{lstlisting}
+
+\subsubsection*{BFS}
+
+\subsubsection*{Djikstra}
+\subsection*{Board 1-2}
+\subsubsection*{A*}
+\begin{lstlisting}
+xxxxooo#............
+xxxoo#o#............
+xxoo#oo#.**********.
+Aoo#xo#.*xxooooooooB
+xxxx#oo#*xoo#******.
+xxxxx#oo#oo#........
+xxxxxx#ooo#.........
+\end{lstlisting}
+
+\subsection*{Board 1-3}
+\subsubsection*{A*}
+\begin{lstlisting}
+........*oooooox*...
+.......*xo#xxxooo**.
+.......##oo#xxx*oxx*
+......#oA#o#*xxxo*xx
+......#o#oo#*xxxoxxx
+......#ooo#.*xxxooxx
+.......###...*xx*ooB
+\end{lstlisting}
+\subsection*{Board 1-4}
+\subsubsection*{A*}
+\begin{lstlisting}
+Ao#.......#......#..
+#o#*#####.#.####.#..
+oo#ooooo#.#....#....
+o##o###o######.#####
+oo#oB#oo#xx*.#...#..
+#o####o##x##.#.#.##.
+xooooooxxxx#...#....
+\end{lstlisting}
+\subsection*{Board 2-1}
+\subsubsection*{A*}
+\begin{lstlisting}
+mmm*xxxxxxxxxxxxxAxxxxxxxxxxxxxxxxxx*mmm
+mmmf*xxxxxxxxxxxxoooooooooooooxxxxx*mmmm
+mmff*xxxxxxxxxxxxxxxxxxxxxxxxoxxxxxx*mmm
+mmfff*xxxxxxxxxx*x*xxxxxxxxxxoxxxxxxx*mm
+mfffff*xxxxxxxx*w*w*xxxxxxxxxoxxxxxxx*mm
+mmfffff*xxxxxxx*www*xxxoooooooxxxxxxx*mm
+mmmfffff*xxxxx*wwww**xxoxxxxxxxxxxxxxx*m
+mmfffffff*xxxxx*ff*xxxxoxxxxxxxxxxxxxx*m
+mmffffffff*xxxxx*g*xxxxoxxxxxxxxxxxxx*mm
+mmmffffgggg**x**gBooooooxxxxxxxxxxxxx*mm
+\end{lstlisting}
+\subsection*{Board 2-2}
+\subsubsection*{A*}
+\begin{lstlisting}
+xxxxxxxxxxxxxxxxxxxxxxxxxxx*fffffrrfffff
+xxAxxxxxxxxxxxxxxxxxxxxxxx*fffffrrffffff
+xxoxxxxxxxxxxxxxxxxxxxxxxx*frrrrrfffffff
+xxoxxxxxxxxxxxxxxxxxxxxxx*x*rfffffffffff
+xxoooooooooooooooxxxxxxx**x**fffffffffff
+xxxxxxxxxxxxxxxxoxxxxxx*xxxxx*f*ffffffff
+xxxxxxxxxxxxxxxxoxxxxxooooooox*x*fffffff
+xxxxxxxxxxxxxxxxoxxxoooxx*xxoxxxx*ffffff
+xxxxxxxxxxxxxxxxoooooxxx*r*xo*x*x*ffffff
+xxxxxxxxxxxxxxxxxxxxxxx*frf*Bf**x*rfffff
+\end{lstlisting}
+\subsection*{Board 2-3}
+\subsubsection*{A*}
+\begin{lstlisting}
+xxxxxxxxxxxxxxxxxxxxxxxxxxxBr*r*xxxx*x*x
+xxxxxxxxxxxxxxxxxxxxxxxxxxxo*x*xxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxoxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxooooooxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxoxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxoxxxxxxxxxxxxxxxxx
+xxoooooooooooooooooooooxxxxxxxxxxxxxxxx*
+xAoxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx****m
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx***mmmmm
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx**mmmmmmmm
+\end{lstlisting}
+\subsection*{Board 2-4}
+\subsubsection*{A*}
+\begin{lstlisting}
+www*xxxxxxxxxxxxxxxooooooooooooooooxxxxx
+wwww*xxxxxxxxxxxooooxxxxxxxxx*x*xxoxxxxx
+wwwww*xxxxxxxxAooxxxxxxxx*x**w*w*xoxxxxx
+wwwwww**x*xxxxxxxxxxxxx**w*wwwww*xox*xx*
+wwwwwwww*w*x*xx*x*x*x**wwwwwwwww**ox***w
+wwwwwwwwwww*w************wwwwww*xoox*www
+wwwwwwwwg*g*gB*xxxxx*xxxx*****ww*ox*wwww
+wwwwggg**x*x*oxxxxxxxxxxxxxxxx**xo**wwww
+wwgggg*x*xxxxoxxxxxxxxxxxxxxxxxxxoxx*www
+wgggf*xxxxxxxooooooooooooooooooooox*gggg
+\end{lstlisting}
 
 \begin{thebibliography}{9}
 
