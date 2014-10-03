@@ -198,4 +198,5 @@ def main():
         print(boardName)
         thing = AStar(boardName).solve()
 
-main()
+# main()
+thing = AStar('boards/board-2-3.txt').solve()

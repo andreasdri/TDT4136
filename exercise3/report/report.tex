@@ -117,7 +117,7 @@ wgggfffrrrrrrooooooooooooooooooooogggggg
 \section*{Subproblem A-3}
 \paragraph{We've used the same syntax} as the figures given to us in the problem description, but as we did not prioritize the visualization part of the exercise, we were not able to hand in a layered presentation. This means we cannot show the type of cell.
 
-\paragraph{In general we can note} that Djikstra uses a very long time to calculate it's solution, especially on board 2-3.
+\paragraph{In general we can note} that Djikstra uses a very long time to calculate it's solution, especially on board 2-3.\paragraph{We can see that} A* finds the shortest path easily, while Djikstra spends more time and has to go further. BFS "explores" everything until it finds it's goal. This c
 
 \subsection*{Board 1-1}
 \subsubsection*{A*}
@@ -142,8 +142,6 @@ xxxxxxxxxxxxxxxxxxx*
 xxxxxxxxxxxxxxxxxx*.
 \end{lstlisting}
 
-
-
 \subsubsection*{BFS}
 \begin{lstlisting}
 ooo*ooo*ooo*ooo*....
@@ -154,6 +152,11 @@ o*ooo*x*o######o*o*.
 o*******o*xxxx*o*o*.
 ooooooooo*xxxxxooo*.
 \end{lstlisting}
+
+\subsubsection*{Observations}
+We see that both Djikstra and A* finds the shortest path, but Djikstra explores nearly the entire graph (a lot of closed nodes). BFS finds a path, but the search is quite "stupid", as it goes up and down many times. 
+A* has the most open nodes. 
+
 
 \subsection*{Board 1-2}
 \subsubsection*{A*}
@@ -189,6 +192,9 @@ o*o*.#oo#o*#x*o*o*xx
 ooo*..#ooo#xxxooo*xx
 \end{lstlisting}
 
+\subsubsection*{Observations}
+A* and Djikstra finds the same path, but Djisktra closes more node (see the right hand side of the board.) BFS finds a path, but explores a lot.
+
 \subsection*{Board 1-3}
 \subsubsection*{A*}
 \begin{lstlisting}
@@ -221,6 +227,8 @@ xxxxxx#o#oo#o*o*o*xx
 xxxxxx#ooo#*o*o*o*xx
 xxxxxxx###xxooo*oooB
 \end{lstlisting}
+\subsubsection*{Observations}
+Again we see that Djikstra closes more nodes than A*, but this time it has a slightly different path - it goes downward before A* does. Djikstra has closed all the nodes on the left hand side of the board, A* on the other hand moved towards the right hand side at once. BFS also closed the whole left part of the board, then moves up an down on the right side. It has the most closed nodes, and the longest path to the goal. 
 
 \subsection*{Board 1-4}
 \subsubsection*{A*}
@@ -255,6 +263,8 @@ oo#oB#oo#....#...#..
 #o####o##.##.#.#.##.
 xoooooo*...#...#....
 \end{lstlisting}
+\subsubsection*{Observations}
+Here all the three algorithms almost has the same path, but this is not a board where you can find that many possible paths to the goal. Djikstra and A* has about the same amount of open nodes, although A* has a little bit more. BFS has not that many closed nodes this time, actually fewer than both A* and Djikstra. It seems this board fits BFS the most.
 
 \subsection*{Board 2-1}
 \subsubsection*{A*}
@@ -299,6 +309,10 @@ mmffffffffgggggg*o*gggggggggggggggffffmm
 mmmffffggggggggggBggggggggggggggggggffmm
 \end{lstlisting}
 
+\subsubsection*{Observations}
+First of all we note that A* and Djikstra has found two different paths, and that A* has fewer closed nodes. A* utilizes the road for maximal speed around the water, whereas Djikstra does not. BFS does not care about anything, and swims across the water. 
+This result makes us question our heuristic function, as the A*- Djikstra-solution differ so much from each other.
+
 
 \subsection*{Board 2-2}
 \subsubsection*{A*}
@@ -342,6 +356,9 @@ x*o*o*o*o*o*o*o*o*o*o*o*o*o*rrrrrfffffff
 x*o*o*o*o*o*o*o*o*o*o*o*o*o*ffffrrffffff
 xxooo*ooo*ooo*ooo*ooo*ooo*ooBffffrrfffff
 \end{lstlisting}
+\subsubsection*{Observations}
+We note that BFS has a lot of closed nodes as usual, and walks up and down - not very surprising, as it searches in breadth first. Seems A* and Djikstra almost has the same amount of closed nodes, and has almost the same path. Our heuristic function fits this board well it seems.
+
 \subsection*{Board 2-3}
 \subsubsection*{A*}
 \begin{lstlisting}
@@ -386,6 +403,9 @@ x*oo*o*o*o*o*o*o*o*o*o*o*o*o*ggggggmmmmm
 xooo*ooo*ooo*ooo*ooo*ooo*ooo*wwmmmmmmmmm
 \end{lstlisting}
 
+\subsubsection*{Observations}
+Again we see that A* and Djikstra almost has the same path, and both closes almost every other node than the path. 
+Nothing new about BFS here.
 
 \subsection*{Board 2-4}
 \subsubsection*{A*}
@@ -429,6 +449,14 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 \end{lstlisting}
+\subsubsection*{Observations}
+BFS has a very wrong solution to this one. Djikstra checks out a little more of the board than A* does (A* has less closed nodes).
+
+\subsection*{General observations}
+\paragraph{We can see that} A* finds the shortest path easily, while Djikstra spends more time and often has to go further. We know that Djikstra finds the shortest path when it returns it's result, but the cost is more calculations. A* performs very well on big boards where our heurstic function fits well. Eg. boards where the goal is straight to the left of A, A* checks out less nodes around the path, where Djikstra may check out all nodes around the path. We also see how A* uses it's heuristic function to maneuver in the right direction in cases where one starts in the middle of the board, and the goal is on the far right or far left. Djikstra first has to check out the other side of the board, before it can move in the right direction, whereas A* goes in the right direction at once. BFS "explores" everything until it finds it's goal, which is not always correct. We also note that when it comes to runtime, Djikstra is far slower than the two others, especially on the "board-2-3". 
+\\ 
+It all depends on our heuristic function, really.
+
 
 \begin{thebibliography}{9}
 
