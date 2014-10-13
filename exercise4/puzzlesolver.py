@@ -3,6 +3,7 @@ __authors__ = 'Stein-Otto Svorstol and Andreas Drivenes'
 
 import random
 import numpy as np
+import math
 
 class Board(object):
 	def __init__(self, board=[]):
@@ -85,6 +86,28 @@ class Board(object):
 
 
 
+def simulatedAnnealing(Tmax, dT, targetBoardEvaluation):
+    # Takes Tmax and dT in to allow for experimentation.
+    # When everything's done it'll only take the size of a the board, and eggs (M, N, k)
+    State = Board() # The State to be returned when optimal
+    State.generateEggs(5, 5, 2) # Initial values
+    Temp = Tmax
+    while (State.evaluateBoard() < targetBoardEvaluation):
+        neighbours = State.generateNeighbours()
+        newState = None # The best neighbour
+        for (neighbour in neighbours): # Loop through neighbours to find the best one
+            if (neighbour.evaluateBoard() > newState):
+                newState = neighbour
+        q = ((newState.evaluateBoard()-State.evaluateBoard())/State.evaluateBoard())
+        p = math.min(1, math.e((-q)/Temp))
+        x = random.random() # Random number between 0 and 1
+        if (x > p ):
+            State = newState
+        else:
+            State = neighbours[random.randint(0, len(neighbours))] # None of them were very good, choose a random one
+        Temp -= dT
+    return State;
+
 
 def main():
 	# board = Board()
@@ -103,5 +126,7 @@ def main():
 			bestBoard = board
 	print(bestValue)
 	print(bestBoard.printBoard())
+
+
 
 main()
