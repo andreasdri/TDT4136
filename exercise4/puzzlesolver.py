@@ -7,6 +7,9 @@ import numpy as np
 class Board(object):
 	def __init__(self, board=[]):
 		self.board = board
+		if len(board) > 0:
+			self.n = len(self.board[0])
+			self.m = len(self.board)
 
 	# Generate a puzzle with m rows, n columns
 	def generateEggs(self, m, n, k):
@@ -14,75 +17,77 @@ class Board(object):
 		self.board = [[random.choice([True, False]) for x in range(n)] for y in range(m)]
 		# Our constraint
 		self.k = k
+		self.n = len(self.board[0])
+		self.m = len(self.board)
 
 	def printBoard(self):
 		board = ''
-		for y in range(len(self.board)):
-			for x in range(len(self.board[0])):
+		for y in range(self.m):
+			for x in range(self.n):
 				cell = self.board[y][x]
 				if cell == True:
 					board += 'Egg'
 				else:
 					board += 'Empty'
 				board += '	'
-				if(x == len(self.board[0]) - 1):
+				if(x == self.n - 1):
 					board += '\n\n'
 		print(board)
 
 	def evaluateBoard(self):
-		value = 1
-		n = len(self.board[0])
-		m = len(self.board)
+		spareEggs = 0.0
+
+		# this should be correct for quadratic puzzles, dont know how good the estimate is for rectangular puzzles
+		numberOfEggsInSolution = min(self.n, self.m) * self.k * 1.0
+
 		# constraint on rows
 		for row in self.board:
-			eggs = 0
+			eggs = 0.0
 			for cell in row:
-				if cell == True:
+				if cell:
 					eggs += 1
-			value += Board.calculateValue(eggs, self.k)
+			spareEggs += Board.calculateValue(eggs, self.k)
 
 		# contstraint on columns
-		for x in range(n):
+		for x in range(self.n):
 			column = [row[x] for row in self.board]
-			eggs = 0
+			eggs = 0.0
 			for cell in column:
-				if cell == True:
+				if cell:
 					eggs += 1
 
-			value += Board.calculateValue(eggs, self.k)
-
-
+			spareEggs += Board.calculateValue(eggs, self.k)
 
 		# constraint on diagonals
+		# used a four liner we found on stackoverflow for getting diagonals with numpy
 		a = np.asarray(self.board)
 		diags = [a[::-1,:].diagonal(i) for i in range(-a.shape[0]+1,a.shape[1])]
 		diags.extend(a.diagonal(i) for i in range(a.shape[1]-1,-a.shape[0],-1))
 		diagonals = [n.tolist() for n in diags]
+
 		for diagonal in diagonals:
-			eggs = 0
-			if len(diagonal) > 1:
+			eggs = 0.0
+			# no need to check diagonals equal or shorter than k! 
+			if len(diagonal) > self.k:
 				for cell in diagonal:
-					if cell == True:
+					if cell:
 						eggs += 1
-				if eggs > self.k:
-					value += (self.k - eggs)/20
-				elif eggs < self.k:
-					value += (eggs - self.k)/20
-				else: 
-					value += 0.05
+				spareEggs += Board.calculateValue(eggs, self.k)
 
+		eggPlaced = 0.0
+		for row in self.board:
+			for cell in row:
+				if cell:
+					eggPlaced += 1
 
- 
-		return value
+		eggFraction = min(1, eggPlaced/numberOfEggsInSolution)
+		# penalize 0.1 per constraint break
+		evaluation = eggFraction - spareEggs*0.1
+		# map to range 0 - 1 with min and max. a solution with more than 10 spare eggs is bad anyway
+		return max(0, evaluation)
 
 	def calculateValue(eggs, k):
-		if eggs > k:
-			return (k - eggs)/10
-		elif eggs < k:
-			return (eggs - k)/10
-		else:
-			return 0.20
-
+		return eggs - k if eggs > k else 0
 
 
 
