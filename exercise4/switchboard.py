@@ -3,10 +3,22 @@ import math, random
 
 class Switchboard(object):
     def __init__(self, m, n, d, w, start, end):
-		self.switchboard = []
+        # 0 for no wire, 1 for regular wire, 2 for turn
+        self.switchboard =  [[0 for x in range(n)] for x in range(m)]
         self.distance = d
         self.turnCost = w
-        for i in range (0, n):
+        self.start = start
+        self.end = end
+
+    def generateNeighbours(self):
+        return
+
+    def evaluateBoard(self):
+        return
+
+    def __str__(self):
+        return str(self.switchboard)
+
 
 
 
@@ -15,7 +27,6 @@ def simulatedAnnealing(M, N, D, W, start, end):
     # Takes Tmax and dT in to allow for experimentation.
     # When everything's done it'll only take the size of a the board, and eggs (M, N, k)
     State = Switchboard(M, N, D, W) # The State to be returned when optimal
-    State.generateEggs(5, 5, 2) # Initial values
 
     #Just some values for now
     Temp = 0.7
@@ -38,6 +49,10 @@ def simulatedAnnealing(M, N, D, W, start, end):
     return State
 
 
-def main():
-    print(simulatedAnnealing(4,4,3, 2, [])) # M=N=4, D=3, W=2
-    print(simulatedAnnealing(6, 5, 3, 2, []))
+def main(): # Missing starting points
+    #print(simulatedAnnealing(4,4,3, 2, (1,4), (4, 4))) # M=N=4, D=3, W=2
+    #print(simulatedAnnealing(6, 5, 3, 2, (), (6, 5)))
+    #print(simulatedAnnealing(8, 8, 3, 2, (), (8, 8)))
+    print(Switchboard(4,2,3, 2, (1,4), (4, 4)))
+
+main()
