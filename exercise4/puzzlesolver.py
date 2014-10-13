@@ -122,5 +122,5 @@ def main():
     print(simulatedAnnealing([6, 6, 2], 1, 0.01, 0.7))
     print(simulatedAnnealing([8, 8, 1], 1, 0.01, 0.7))
     print(simulatedAnnealing([10, 10, 3], 1, 0.01, 0.7))
-    
+
 main()
