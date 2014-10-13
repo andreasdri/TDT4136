@@ -10,7 +10,7 @@ class Board(object):
 		self.board = board
 
 	# Generate a puzzle with m rows, n columns
-	def generateEggs(self, m, n, k):
+	def generateEggBoard(self, m, n, k):
 		# The eggs are randomly placed
 		self.board = [[random.choice([True, False]) for x in range(n)] for y in range(m)]
 		# Our constraint
@@ -72,8 +72,6 @@ class Board(object):
 				else: 
 					value += 0.05
 
-
- 
 		return value
 
 	def calculateValue(eggs, k):
@@ -84,32 +82,37 @@ class Board(object):
 		else:
 			return 0.20
 
+    def generateNeighbours():
+        neighbours = []
+        return neighbours
 
 
-def simulatedAnnealing(Tmax, dT, targetBoardEvaluation):
+def simulatedAnnealing(problemData, Tmax, dT, targetBoardEvaluation):
     # Takes Tmax and dT in to allow for experimentation.
-    # When everything's done it'll only take the size of a the board, and eggs (M, N, k)
-    State = Board() # The State to be returned when optimal
-    State.generateEggs(5, 5, 2) # Initial values
-    Temp = Tmax
-    while (State.evaluateBoard() < targetBoardEvaluation):
-        neighbours = State.generateNeighbours()
-        newState = None # The best neighbour
-        for (neighbour in neighbours): # Loop through neighbours to find the best one
-            if (neighbour.evaluateBoard() > newState):
-                newState = neighbour
-        q = ((newState.evaluateBoard()-State.evaluateBoard())/State.evaluateBoard())
-        p = math.min(1, math.e((-q)/Temp))
+    # Problemdata is [M, N, K]
+    state = Board() # The State to be returned when optimal
+    state.generateEggBoard(problemData[0], problemData[1], problemData[2]) # Initial values
+    temp = Tmax
+    while (state.evaluateBoard() < targetBoardEvaluation):
+        neighbours = state.generateNeighbours()
+        bestNeighbour = neighbours[0]
+        for neighbour in neighbours: # Loop through neighbours to find the best one
+            if (neighbour.evaluateBoard() > bestNeighbour.evaluateBoard()): # Is this better than the best?
+                bestNeighbour = neighbour
+        q = ((bestNeighbour.evaluateBoard()-state.evaluateBoard())/state.evaluateBoard()) # Now lets do some calculations
+        p = math.min(1, math.e((-q)/temp)) # To find if we want to go in that direction
         x = random.random() # Random number between 0 and 1
-        if (x > p ):
-            State = newState
+        if x > p:
+            state = bestNeighbour
         else:
-            State = neighbours[random.randint(0, len(neighbours))] # None of them were very good, choose a random one
-        Temp -= dT
-    return State;
+            state = neighbours[random.randint(0, len(neighbours))] # None of them were very good, choose a random one
+        temp -= dT # We don't wanna go on forever now do we?
+    return state
 
 
 def main():
+    print(simulatedAnnealing([5,5, 2], 1, 0.01, 0.7))
+
 	# board = Board()
 	# board.generateEggs(3, 3, 1)
 	# board.printBoard()
@@ -118,8 +121,8 @@ def main():
 	bestBoard = Board()
 	for i in range(100000):
 		board = Board()
-		board.generateEggs(5, 5, 2)
-		
+		board.generateEggBoard(5, 5, 2)
+
 		value = board.evaluateBoard()
 		if value > bestValue:
 			bestValue = value
