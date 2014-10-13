@@ -112,24 +112,8 @@ def simulatedAnnealing(problemData, Tmax, dT, targetBoardEvaluation):
 
 def main():
     print(simulatedAnnealing([5,5, 2], 1, 0.01, 0.7))
-
-	# board = Board()
-	# board.generateEggs(3, 3, 1)
-	# board.printBoard()
-	# print(board.evaluateBoard())
-	bestValue = -1000000
-	bestBoard = Board()
-	for i in range(100000):
-		board = Board()
-		board.generateEggBoard(5, 5, 2)
-
-		value = board.evaluateBoard()
-		if value > bestValue:
-			bestValue = value
-			bestBoard = board
-	print(bestValue)
-	print(bestBoard.printBoard())
-
-
-
+    print(simulatedAnnealing([6, 6, 2], 1, 0.01, 0.7))
+    print(simulatedAnnealing([8, 8, 1], 1, 0.01, 0.7))
+    print(simulatedAnnealing([10, 10, 3], 1, 0.01, 0.7))
+    
 main()
