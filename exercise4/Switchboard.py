@@ -31,10 +31,8 @@ def simulatedAnnealing(M, N, D, W, start, end):
     # Takes Tmax and dT in to allow for experimentation.
     # When everything's done it'll only take the size of a the board, and eggs (M, N, k)
     State = Switchboard(M, N, D, W) # The State to be returned when optimal
-
-    #Just some values for now
-    Temp = 0.7
-    dT = 0.01
+    Temp = 0.07
+    dT = 0.00001
     targetBoardEvaluation = 0.7
     while (State.evaluateBoard() < targetBoardEvaluation):
         neighbours = State.generateNeighbours()
@@ -53,7 +51,7 @@ def simulatedAnnealing(M, N, D, W, start, end):
     return State
 
 
-def main(): # Missing starting points
+def main():
     #print(simulatedAnnealing(4,4,3, 2, (1,4), (4, 4))) # M=N=4, D=3, W=2
     #print(simulatedAnnealing(6, 5, 3, 2, (), (6, 5)))
     #print(simulatedAnnealing(8, 8, 3, 2, (), (8, 8)))
