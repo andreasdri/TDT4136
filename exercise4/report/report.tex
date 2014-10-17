@@ -10,18 +10,18 @@
 \begin{document}
 \maketitle
 \section{Code}
-Handed in seperatly in files EggCartonPuzzle.py and Switchboard.py.
+Handed in seperatly in the file EggCartonPuzzle.py.
 
 \section{Key aspects involved in SA-specialization}
 \paragraph{We chose} to represent the board as a simple matrix, that is a list holding lists. We implemented in Python, so the implementation should be pretty straight forward.
 
-\paragraph{The objective function}
+\paragraph{The objective function} evaluates how good a solution may be. In our implementation it counts the number of eggs that breaks a constraint on each row and column.
 
-\paragraph{Neighbour generation} is a very important part of this problem, as the tuning of the current state to these neighbours is what the whole solution is based upon.
-\section{Diagrams}
-\subsection{Egg Carton Puzzle}
-
-\subsection{Switchboard}
+\paragraph{Neighbour generation} is a very important part of this problem, as the tuning of the current state to these neighbours is what the whole solution is based upon. In our implementation we generate \begin{math}N\cdot M\end{math} neighbours. For each neighbour we take one cell from the state and replace false/true. Everything else is the same. We'll get between 5 and 15 \% in each neighbour. Some neighbours may be equal, so a possible improvement would be to implement it with a set instead of a list.
+\section{Diagrams for the EggCartonPuzzle}
+\begin{lstlisting}
+// Legg diagram her, andybb
+\end{lstlisting}
 
 \section{The heurstic vs the objective function}
 
