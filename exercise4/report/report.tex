@@ -10,9 +10,9 @@
 \begin{document}
 \maketitle
 \section{Code}
-Handed in seperatly in the file EggCartonPuzzle.py.
+Handed in seperatly in the file EggCartonPuzzle.py. It's implemented in Python 3.4, and depends upon the external library numpy.
 
-\section{Key aspects involved in SA-specialization}
+\section{Key aspects involved in the SA-specialization}
 \paragraph{We chose} to represent the board as a simple matrix, that is a list holding lists. We implemented in Python, so the implementation should be pretty straight forward.
 
 \paragraph{The objective function} evaluates how good a solution may be. In our implementation it counts the number of eggs that breaks a constraint on each row and column.
@@ -24,5 +24,5 @@ Handed in seperatly in the file EggCartonPuzzle.py.
 \end{lstlisting}
 
 \section{The heurstic vs the objective function}
-
+\paragraph{The objective function} only evaluates how good one possible solution, a neighbour, may be. It only gives one a pointer on which neighbour may be the best, and does not really take our goal in mind. The heuristic function on the other hand, will evaluate how far we are from the goal, and use that as a pointer as to which direction in should go in. 
 \end{document}
