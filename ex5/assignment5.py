@@ -4,6 +4,8 @@ import copy
 import itertools
 from random import choice
 
+count = 0
+failCount = 0
 class CSP:
     def __init__(self):
         # self.variables is a list of the variable names in the CSP
@@ -110,18 +112,31 @@ class CSP:
         assignments and inferences that took place in previous
         iterations of the loop.
         """
+
+        # This is a counter for the number of times backtrack is called
+        global count
+        count += 1
+
         if all(len(assignment[key]) == 1 for key in assignment): # If length of all values is 1, then it is complete
             return assignment
+
         var = self.select_unassigned_variable(assignment)
-        for key, value in self.domains: #Domains are now unordered, maybe needs some work
-            assigmentCopy = copy.deepcopy(assignment) # Take deep copy for every iteration
-            if( value in self.constraints): # if value is consistent with assigment
-                assigmentCopy[var] = value
-                if (self.inference(assigmentCopy, self.get_all_arcs())): # if inference does not give failure
-                    result = self.backtrack(assigmentCopy)
-                    if result:
-                        return result
-            del assigmentCopy[var]
+
+        for value in assignment[var]: 
+            # Take deep copy for every iteration
+            assigmentCopy = copy.deepcopy(assignment) 
+
+            # Set the our domain to be the value we have chosen
+            currentDomain = []
+            currentDomain.append(value)
+            assigmentCopy[var] = currentDomain
+
+            if (self.inference(assigmentCopy, self.get_all_neighboring_arcs(var))): # if inference does not give failure
+                result = self.backtrack(assigmentCopy)
+                if result: # We have a solution!
+                    return result
+                global failCount
+                failCount += 1
         return False # Failure
 
     def select_unassigned_variable(self, assignment):
@@ -130,7 +145,15 @@ class CSP:
         in 'assignment' that have not yet been decided, i.e. whose list
         of legal values has a length greater than one.
         """
+        # Pick a random variable with length > 1
+        # We also tested with picking the first variable with length > 1
         return choice([var for var in assignment if len(assignment[var]) > 1])
+        # for key in assignment:
+        #     var = assignment[key]
+        #     if len(var) > 1:
+        #         return key
+
+
 
     def inference(self, assignment, queue):
         """The function 'AC-3' from the pseudocode in the textbook.
@@ -138,13 +161,16 @@ class CSP:
         the lists of legal values for each undecided variable. 'queue'
         is the initial queue of arcs that should be visited.
         """
-        while len(queue) > 0:
+
+        # Should be pretty straight forward
+        while queue:
             (i, j) = queue.pop(0)
             if self.revise(assignment, i, j):
                 if len(assignment[i]) == 0:
                     return False
                 for k in self.get_all_neighboring_arcs(i):
-                    queue.append(k)
+                    if k[1] != j:
+                        queue.append(k)
         return True
 
 
@@ -157,18 +183,19 @@ class CSP:
         between i and j, the value should be deleted from i's list of
         legal values in 'assignment'.
         """
-
         revised = False
-        satisfied = False
+        # All pairs that satisfy the constraint
         legalPairs = self.constraints[i][j]
         for x in assignment[i]:
+            satisfied = False
             for y in assignment[j]:
                 if (x, y) in legalPairs:
                     satisfied = True
 
-            if satisfied == False:
-                assignment[i].remove(x)
-                revised = True
+                if satisfied == False and len(assignment[j]) == 1:
+                    # If the value doesn't satisfy the constraint, delete it
+                    assignment[i].remove(x) 
+                    revised = True
 
         return revised
 
@@ -237,7 +264,9 @@ def print_sudoku_solution(solution):
 
 
 
-csp = create_sudoku_csp('sudokus/medium.txt')
-print csp.constraints
-print csp.domains
-csp.backtracking_search()
+csp = create_sudoku_csp('sudokus/veryhard.txt')
+print_sudoku_solution(csp.backtracking_search())
+print count
+print failCount
+
+
