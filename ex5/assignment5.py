@@ -263,10 +263,20 @@ def print_sudoku_solution(solution):
             print '------+-------+------'
 
 
+# Let's run the sudokus
+def solveSudoku(filename):
+    global count, failCount
+    count = 0
+    failCount = 0
+    csp = create_sudoku_csp(filename)
+    print filename
+    print_sudoku_solution(csp.backtracking_search())
+    print "Backtracks:" + str(count)
+    print "Fails: " + str(failCount)
 
-csp = create_sudoku_csp('sudokus/veryhard.txt')
-print_sudoku_solution(csp.backtracking_search())
-print count
-print failCount
+def main():
+    names = ['easy', 'medium', 'hard', 'veryhard']
+    for name in names:
+        solveSudoku('sudokus/' + name + '.txt')
 
-
+main()
