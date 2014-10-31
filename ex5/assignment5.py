@@ -113,7 +113,7 @@ class CSP:
         if all(len(assignment[key]) == 1 for key in assignment): # If length of all values is 1, then it is complete
             return assignment
         var = self.select_unassigned_variable(assignment)
-        for value in self.domains: #Domains are now unordered, maybe needs some work
+        for key, value in self.domains: #Domains are now unordered, maybe needs some work
             assigmentCopy = copy.deepcopy(assignment) # Take deep copy for every iteration
             if( value in self.constraints): # if value is consistent with assigment
                 assigmentCopy[var] = value
