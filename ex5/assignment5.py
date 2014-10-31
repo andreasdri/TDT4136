@@ -114,17 +114,14 @@ class CSP:
             return assignment
         var = self.select_unassigned_variable(assignment)
         for value in self.domains: #Domains are now unordered, maybe needs some work
-            currentAssigment = copy.deepcopy(assignment) # Take deep copy for every iteration
+            assigmentCopy = copy.deepcopy(assignment) # Take deep copy for every iteration
             if( value in self.constraints): # if value is consistent with assigment
-                currentAssigment[var] = value
-                inf = self.inference(currentAssigment, self.get_all_arcs())
-                if (inf): # if inference does not give failure
-                    
-                    result = self.backtrack(currentAssigment)
-                    if (result is not False): #not equal to failure
-                        return result # Success
-            del currentAssigment[var]
-
+                assigmentCopy[var] = value
+                if (self.inference(assigmentCopy, self.get_all_arcs())): # if inference does not give failure
+                    result = self.backtrack(assigmentCopy)
+                    if result:
+                        return result
+            del assigmentCopy[var]
         return False # Failure
 
     def select_unassigned_variable(self, assignment):
