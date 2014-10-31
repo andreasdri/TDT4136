@@ -123,21 +123,21 @@ class CSP:
         var = self.select_unassigned_variable(assignment)
 
         for value in assignment[var]: 
-            # Take deep copy for every iteration
+            # Take deep copy for every iteration, as the description above tells us (we're good boys)
             assigmentCopy = copy.deepcopy(assignment) 
 
-            # Set the our domain to be the value we have chosen
+            # Set the current domain so we can see if it works
             currentDomain = []
             currentDomain.append(value)
             assigmentCopy[var] = currentDomain
 
             if (self.inference(assigmentCopy, self.get_all_neighboring_arcs(var))): # if inference does not give failure
                 result = self.backtrack(assigmentCopy)
-                if result: # We have a solution!
-                    return result
+                if result: # We have a solution! Whoo!
+                    return result # Give me the result, thank you
                 global failCount
                 failCount += 1
-        return False # Failure
+        return False # Failure. So sad.
 
     def select_unassigned_variable(self, assignment):
         """The function 'Select-Unassigned-Variable' from the pseudocode
@@ -161,16 +161,16 @@ class CSP:
         the lists of legal values for each undecided variable. 'queue'
         is the initial queue of arcs that should be visited.
         """
-
-        # Should be pretty straight forward
+        # Loop while we have elements
         while queue:
             (i, j) = queue.pop(0)
             if self.revise(assignment, i, j):
+                # Isf the suduko puzzle cant be solved
                 if len(assignment[i]) == 0:
                     return False
                 for k in self.get_all_neighboring_arcs(i):
                     if k[1] != j:
-                        queue.append(k)
+                        queue.append(k) # Add neighbor arcs to the queue
         return True
 
 
