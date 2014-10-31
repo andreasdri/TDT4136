@@ -152,10 +152,10 @@ class CSP:
         while len(queue) > 0:
             (i, j) = queue.pop(0)
             if self.revise(assignment, i, j):
-                if len(domains[i]) == 0:
+                if len(assignment[i]) == 0:
                     return False
-            for k in self.get_all_neighboring_arcs(i):
-                queue.append(k)
+                for k in self.get_all_neighboring_arcs(i):
+                    queue.append(k)
         return True
 
 
@@ -177,9 +177,9 @@ class CSP:
                 if (x, y) in legalPairs:
                     satisfied = True
 
-        if satisfied == False:
-            assignment[i].remove(x)
-            revised = True
+            if satisfied == False:
+                assignment[i].remove(x)
+                revised = True
 
         return revised
 
