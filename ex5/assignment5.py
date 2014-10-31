@@ -110,7 +110,29 @@ class CSP:
         iterations of the loop.
         """
         # TODO: IMPLEMENT THIS
-        pass
+        if self.assigmentIsComplete(assignment): # TODO
+            return assignment
+        var = self.select_unassigned_variable(assignment)
+        for value in self.domains:
+            currentAssigment = copy.deepcopy(assignment) # Take deep copy for every iteration
+            if(value is ): # if value is consistent with assigment
+                currentAssigment.insert(var, value)
+                inf = self.inference(currentAssigment, var, value)
+                if (inferences ): # if Does not give failure
+                    #add inferences to assigment
+                    result = self.backtrack(currentAssigment)
+                    if (result): #not equal to failure
+                        return result
+
+
+
+        return #Failure
+
+    def assigmentIsComplete(self, assigment):
+        for key, value in assigment:
+            if (value.length is not 1):
+                return False
+        return True
 
     def select_unassigned_variable(self, assignment):
         """The function 'Select-Unassigned-Variable' from the pseudocode
