@@ -119,11 +119,12 @@ class CSP:
                 currentAssigment[var] = value
                 inf = self.inference(currentAssigment, self.get_all_arcs())
                 if (inf): # if inference does not give failure
-                    currentAssigment.insert(inf)#add inferences to assigment
+                    
                     result = self.backtrack(currentAssigment)
                     if (result is not False): #not equal to failure
                         return result # Success
-            del assignment[var]
+            del currentAssigment[var]
+
         return False # Failure
 
     def select_unassigned_variable(self, assignment):
