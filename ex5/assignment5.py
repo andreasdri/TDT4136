@@ -110,30 +110,21 @@ class CSP:
         assignments and inferences that took place in previous
         iterations of the loop.
         """
-        # TODO: IMPLEMENT THIS
-        if self.assigmentIsComplete(assignment): # TODO
+        if all(assignment[key].length == 1 for key in assignment): # If length of all values is 1, then it is complete
             return assignment
         var = self.select_unassigned_variable(assignment)
-        for value in self.domains:
+        for value in self.domains: #Domains are now unordered, maybe needs some work
             currentAssigment = copy.deepcopy(assignment) # Take deep copy for every iteration
-            if(value is ): # if value is consistent with assigment
+            if( value in self.constraints): # if value is consistent with assigment
                 currentAssigment.insert(var, value)
                 inf = self.inference(currentAssigment, var, value)
-                if (inferences ): # if Does not give failure
-                    #add inferences to assigment
+                if (inf): # if inference does not give failure
+                    currentAssigment.insert(inf)#add inferences to assigment
                     result = self.backtrack(currentAssigment)
-                    if (result): #not equal to failure
-                        return result
-
-
-
-        return #Failure
-
-    def assigmentIsComplete(self, assigment):
-        for key, value in assigment:
-            if (value.length is not 1):
-                return False
-        return True
+                    if (result is not False): #not equal to failure
+                        return result # Success
+            assignment.remove(inf, var) # Remove inf and var
+        return False; # Failure
 
     def select_unassigned_variable(self, assignment):
         """The function 'Select-Unassigned-Variable' from the pseudocode
