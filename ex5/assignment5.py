@@ -2,6 +2,7 @@
 
 import copy
 import itertools
+from random import choice
 
 class CSP:
     def __init__(self):
@@ -140,8 +141,7 @@ class CSP:
         in 'assignment' that have not yet been decided, i.e. whose list
         of legal values has a length greater than one.
         """
-        # TODO: IMPLEMENT THIS
-        pass
+        return choice([var for var in assignment if len(assignment[var]) > 1])
 
     def inference(self, assignment, queue):
         """The function 'AC-3' from the pseudocode in the textbook.
@@ -149,8 +149,15 @@ class CSP:
         the lists of legal values for each undecided variable. 'queue'
         is the initial queue of arcs that should be visited.
         """
-        # TODO: IMPLEMENT THIS
-        pass
+        while len(queue) > 0:
+            (i, j) = queue.pop(0)
+            if self.revise(assignment, i, j):
+                if len(domains[i]) == 0:
+                    return False
+            for k in self.get_all_neighboring_arcs(i):
+                queue.append(k)
+        return True
+
 
     def revise(self, assignment, i, j):
         """The function 'Revise' from the pseudocode in the textbook.
@@ -161,8 +168,24 @@ class CSP:
         between i and j, the value should be deleted from i's list of
         legal values in 'assignment'.
         """
-        # TODO: IMPLEMENT THIS
-        pass
+
+        revised = False
+        satisfied = False
+        legalPairs = self.constraints[i][j]
+        for x in assignment[i]:
+            for y in assignment[j]:
+                if (x, y) in legalPairs:
+                    satisfied = True
+
+        if satisfied == False:
+            assignment[i].remove(x)
+            revised = True
+
+        return revised
+
+
+
+
 
 def create_map_coloring_csp():
     """Instantiate a CSP representing the map coloring problem from the
@@ -222,3 +245,10 @@ def print_sudoku_solution(solution):
         print
         if row == 2 or row == 5:
             print '------+-------+------'
+
+
+
+csp = create_sudoku_csp('sudokus/medium.txt')
+print csp.constraints
+print csp.domains
+csp.backtracking_search()
