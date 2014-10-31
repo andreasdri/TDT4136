@@ -110,7 +110,6 @@ class CSP:
         assignments and inferences that took place in previous
         iterations of the loop.
         """
-        # TODO: IMPLEMENT THIS
         if all(assignment[key].length == 1 for key in assignment): # If length of all values is 1, then it is complete
             return assignment
         var = self.select_unassigned_variable(assignment)
@@ -119,11 +118,11 @@ class CSP:
             if( value in self.constraints): # if value is consistent with assigment
                 currentAssigment.insert(var, value)
                 inf = self.inference(currentAssigment, var, value)
-                if (): # if inference does not give failure
+                if (inf): # if inference does not give failure
                     currentAssigment.insert(inf)#add inferences to assigment
                     result = self.backtrack(currentAssigment)
-                    if (result): #not equal to failure
-                        return result
+                    if (result is not False): #not equal to failure
+                        return result # Success
             assignment.remove(inf, var) # Remove inf and var
         return False; # Failure
 
@@ -144,7 +143,7 @@ class CSP:
         while len(queue) > 0:
             (i, j) = queue.pop(0)
             if self.revise(assignment, i, j):
-                if len(domains[i]) == 0:
+                if len(self.domains[i]) == 0:
                     return False
             for k in self.get_all_neighboring_arcs(i):
                 queue.append(k)
